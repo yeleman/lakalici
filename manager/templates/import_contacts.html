@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<h1>Importer des contacts</h1>
+<p>Ici, vous pouvez importer un grand nombre de contact d'un coup, sans avoir à le faire un à un.</p>
+<p>LKLC n'enregistre que deux informations pour un contact : <strong>le numéro de téléphone</strong> et <strong>le nom</strong> (facultatif).</p>
+
+<form class="import_contacts pure-form pure-form-stacked" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+	<legend>Importer votre fichier de contacts <i class="fa fa-file-excel-o"></i></legend>
+    <fieldset>
+        <p>En utilisant notre <a href="{% static 'contacts-lklc.xls' %}">modèle Excel</a>, vous pouvez simplement copier-coller tous vos contacts et les importer en un clic.</p>
+        {{ form.as_p }}
+        <button type="submit" class="pure-button pure-button-primary">Importer le fichier</button>
+    </fieldset>
+</form>
+
+{% endblock %}
+
+{% block onJQstart %}
+var group_container = $("#id_group").parent();
+var group_name_container = $("#id_group_name").parent();
+function toggle_group_list_name(val) {
+	if (val == 'add_to_group' || val == 'reset_group') {
+		group_container.show();
+		group_name_container.hide();
+	} else {
+		group_container.hide();
+		group_name_container.show();
+	}
+}
+$("#id_action").on('change', function (e) {
+	toggle_group_list_name($(this).val());
+});
+toggle_group_list_name($("#id_action").val());
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Identification{% endblock %}
+
+{% block content %}
+
+<h1>Identification</h1>
+
+{% if form.errors %}
+<p class="alert alert-danger">Votre nom d'utilisateur et mot de passe ne correspondent pas. S'il vous plaît essayez de nouveau.</p>
+{% endif %}
+
+<p class="alert alert-warning">En cas de perte de votre identifiant ou mot de passe, appellez la Hotline au <strong>76 49 90 55</strong>.</p>
+
+<form class="pure-form" method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Merci de vous identifier</legend>
+
+        <input type="text" name="{{ form.username.name }}"
+               placeholder="{{ form.username.label }}"
+               autofocus="autofocus">
+        <input type="password" name="{{ form.password.name }}"
+               placeholder="{{ form.password.label }}">
+
+        <button type="submit" class="pure-button pure-button-primary">S'identifier</button>
+    </fieldset>
+</form>
+{% endblock %}

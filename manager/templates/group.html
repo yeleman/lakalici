@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load lklc %}
+
+{% block content %}
+<h1>{{ group.name }}</h1>
+
+<form class="new-contact-form pure-form pure-form-stacked" method="POST">
+{% csrf_token %}
+    <fieldset>
+        <legend>Ajouter un contact</legend>
+		{{ form.as_p }}
+		<button type="submit" class="pure-button pure-button-primary">Ajouter</button>
+    </fieldset>
+</form>
+
+<p>
+	<button class="create-task pure-button button-secondary">
+	<i class="fa fa-plus"></i> Créer une tâche avec ces <span id="nb_selected_contacts">0</span> contacts</button>
+	<a href="{% url 'group_delete' group.slug %}" class="pure-button button-error">
+	<i class="fa fa-trash"></i> Supprimer le groupe</a>
+</p>
+
+{% for contact in group.members.all %}
+{% if forloop.first %}
+<form id="create-task-form" method="POST" action="{% url 'new_task' %}">
+{% csrf_token %}
+<table class="contact-table pure-table pure-table-bordered pure-table-striped">
+<thead>
+<tr>
+	<th><input type="checkbox" id="select_all" value="true" /></th>
+	<th>Numéro</th>
+	<th>Nom</th>
+	<th>Opérateur</th>
+	<th><i title="Retirer du groupe" class="fa fa-trash"></i></th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+<tr>
+	<td><input type="checkbox" name="contact_ids" value="{{ contact.id }}" /></td>
+	<td>{{ contact.number|phone }}</td>
+	<td>{{ contact.name }}</td>
+	<td>{{ contact.operator|carrier }}</td>
+	<td><a href="{% url 'group_contact_remove' group.slug contact.id %}"><i class="fa fa-trash"></i></a></td>
+</tr>
+{% if forloop.last %}
+</tbody>
+</table>
+</form>
+{% endif %}
+{% empty %}
+<p>Pas de contact dans ce groupe !</p>
+{% endfor %}
+{% endblock %}
+
+{% block onJQstart %}
+var all_boxes = $('.contact-table tbody input');
+$('#select_all').on('change', function (e) {
+	var is_checked = ($(this).prop('checked') === true);
+	if (is_checked) {
+		all_boxes.prop('checked', true);
+	} else {
+		all_boxes.prop('checked', false);
+	}
+	console.log(all_boxes);
+});
+
+function disable_button(selector) {
+	selector.addClass('pure-button-disabled');
+	selector.prop('disabled', true);
+}
+
+function enable_button(selector) {
+	selector.removeClass('pure-button-disabled');
+	selector.prop('disabled', false);	
+}
+
+// update button number
+function update_nb_selected() {
+	var nb = $('.contact-table tbody input:checked').length;
+	$('#nb_selected_contacts').text(nb);
+	var btn = $('.create-task');
+	if (nb == 0) {
+		disable_button(btn);
+	} else {
+		enable_button(btn)
+	}
+}
+$('input[type=checkbox]').on('change', update_nb_selected);
+update_nb_selected();
+
+$('.create-task').on('click', function (e) {
+	$('#create-task-form').submit();	
+});
+{% endblock %}

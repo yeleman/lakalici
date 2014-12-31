@@ -1,0 +1,108 @@
+body { color: #333; }
+a {
+	text-decoration: none;
+	color: #1b98f8;
+}
+
+.content {
+	padding: 0 1em;
+	box-sizing: border-box;
+}
+
+.sidebar {
+	background: rgb(37, 42, 58);
+	height: 100%;
+	color: white;
+}
+
+
+.primary-button,
+.secondary-button {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-radius: 20px;
+}
+.primary-button {
+    color: #fff;
+    background: #1b98f8;
+    margin: 1em 0;
+}
+.secondary-button {
+    background: #fff;
+    border: 1px solid #ddd;
+    color: #666;
+    padding: 0.5em 2em;
+    font-size: 80%;
+}
+
+
+
+.sidebar .pure-menu.pure-menu-open {
+    background: transparent;
+    border: none;
+    text-align: left;
+}
+.sidebar .pure-menu a:hover,
+.sidebar .pure-menu a:focus,
+.sidebar .pure-menu-selected {
+    background: rgb(55, 60, 90);
+    text-decoration: none;
+    color: rgb(25, 35, 60);
+}
+.sidebar .pure-menu a {
+    color: #fff;
+    margin-left: 0.5em;
+    white-space: normal;
+}
+.sidebar .pure-menu-heading {
+    border-bottom: none;
+    font-size:110%;
+    color: rgb(75, 113, 151);
+    text-align: center;
+    text-transform: none;
+}
+
+.count {
+    color: rgb(75, 113, 151);
+}
+
+.new-contact-form {
+	float: right;
+}
+
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    /*box-sizing: border-box;*/
+}
+
+.button-success:hover,
+.button-error:hover,
+.button-warning:hover,
+.button-secondary:hover {
+	color: white;
+	text-decoration: none;
+	/*border: 1px solid #333333;*/
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221); /* this is a light blue */
+}

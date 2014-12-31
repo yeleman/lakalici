@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Ajouter un groupe</h2>
+<form class="add_single_group pure-form" method="POST">
+{% csrf_token %}
+	<p>Notez que vous pouvez créer automatiquement vos groupes lors de l'<a href="{% url 'import_contacts' %}">import de vos contacts</a>.</p>
+    <fieldset>
+    	{% if form.errors.name %}
+    	<p class="error"><i class="fa fa-exclamation-triangle"></i> {{ form.errors.name.0 }}</p>{% endif %}
+        {{ form.name }}
+        <button type="submit" class="pure-button pure-button-primary">Ajouter</button>
+    </fieldset>
+</form>
+{% endblock %}

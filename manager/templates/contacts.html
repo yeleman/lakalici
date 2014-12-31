@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include "add_single_contact.html" %}
+<a class="pure-button" href="{% url 'import_contacts' %}">Importer des contacts</a>
+
+<h1>Contacts</h1>
+{% for contact in contacts.all %}
+{% if forloop.first %}<ul>{% endif %}
+<li>{{ contact }}</li>
+{% if forloop.last %}</ul>{% endif %}
+{% empty %}
+<p>Pas de contact pour le moment.</p>
+{% endfor %}
+{% endblock %}

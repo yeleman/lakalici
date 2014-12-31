@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Tâches</h1>
+{% for task in tasks.all %}
+{% if forloop.first %}
+<table class="contact-table pure-table pure-table-bordered pure-table-striped">
+<thead>
+<tr>
+	<th>ID</th>
+	<th>Nom</th>
+	<th>Action</th>
+	<th>Nb éléments</th>
+	<th>Montant total</th>
+	<th>Statut</th>
+	<th><i title="Retirer dde la tâche" class="fa fa-trash"></i></th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+<tr>
+	<td><a href="{% url 'task' task.uid %}">{{ task.uid }}</a></td>
+	<td>{{ task.name }}</td>
+	<td>{{ task.action }}</td>
+	<td>{{ task.task_items.count }}</td>
+	<td>{{ task.total_amount }}</td>
+	<td>{{ task.status }}</td>
+	<td><a href=""><i class="fa fa-trash"></i></a></td>
+</tr>
+{% if forloop.last %}
+</tbody>
+</table>
+{% endif %}
+{% empty %}
+<p>Pas de tâche pour le moment !</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load lklc %}
+
+{% block content %}
+<h1>{{ task.name }}</h1>
+<h2>#{{ task.uid }} {{ task.action|verbose:"Task.ACTIONS" }}</h2>
+
+{% for ti in task.task_items.all %}
+{% if forloop.first %}
+<form id="create-task-form" method="POST" action="{% url 'new_task' %}">
+{% csrf_token %}
+<table class="contact-table pure-table pure-table-bordered pure-table-striped">
+<thead>
+<tr>
+	<th><input type="checkbox" id="select_all" value="true" /></th>
+	<th>Numéro</th>
+	<th>Nom</th>
+	<th>Opérateur</th>
+	<th>Montant</th>
+	<th>Statut</th>
+	<th><i title="Retirer dde la tâche" class="fa fa-trash"></i></th>
+</tr>
+</thead>
+<tbody>
+{% endif %}
+<tr>
+	<td><input type="checkbox" name="contact_ids" value="{{ contact.id }}" /></td>
+	<td>{{ ti.contact.number|phone }}</td>
+	<td>{{ ti.contact.name }}</td>
+	<td>{{ ti.contact.operator|carrier }}</td>
+	<td><input type="number" step="100" min="0" name="amount_{{ ti.id }}" value="{{ ti.amount }}" /></td>
+	<td>{{ ti.status }}{% if ti.status == ti.COMPLETE %}: {{ ti.receipt }}{% endif %}</td>
+	<td><a href=""><i class="fa fa-trash"></i></a></td>
+</tr>
+{% if forloop.last %}
+<tr>
+	<td colspan="4">TOTAL</td>
+	<td colspan="3" class="total_amount"></td>
+</tr>
+</tbody>
+</table>
+</form>
+{% endif %}
+{% empty %}
+<p>Pas de contact pour cette tâche !</p>
+{% endfor %}
+{% endblock %}
+
+{% block onJQstart %}
+var all_boxes = $('.contact-table tbody input');
+$('#select_all').on('change', function (e) {
+	var is_checked = ($(this).prop('checked') === true);
+	if (is_checked) {
+		all_boxes.prop('checked', true);
+	} else {
+		all_boxes.prop('checked', false);
+	}
+	console.log(all_boxes);
+});
+
+function disable_button(selector) {
+	selector.addClass('pure-button-disabled');
+	selector.prop('disabled', true);
+}
+
+function enable_button(selector) {
+	selector.removeClass('pure-button-disabled');
+	selector.prop('disabled', false);	
+}
+
+// update button number
+function update_nb_selected() {
+	var nb = $('.contact-table tbody input:checked').length;
+	$('#nb_selected_contacts').text(nb);
+	var btn = $('.create-task');
+	if (nb == 0) {
+		disable_button(btn);
+	} else {
+		enable_button(btn)
+	}
+}
+$('input[type=checkbox]').on('change', update_nb_selected);
+update_nb_selected();
+
+$('.create-task').on('click', function (e) {
+	$('#create-task-form').submit();	
+});
+
+var all_amount_inputs = $('input[name^=amount_]');
+function update_total_amount() {
+	var total = 0;
+	$.each(all_amount_inputs, function (index, elem) {
+		total += parseInt($(elem).val());
+	});
+	$('.total_amount').text(total + "F CFA");
+}
+update_total_amount();
+
+all_amount_inputs.on('change', update_total_amount);
+{% endblock %}
