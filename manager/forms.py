@@ -6,8 +6,8 @@ from __future__ import (unicode_literals, absolute_import,
                         division, print_function)
 import logging
 
-# from django import forms
-import floppyforms.__future__ as forms
+from django import forms
+# import floppyforms.__future__ as forms
 
 # from manager.models import Contact
 from manager.numbers import normalized_phonenumber
@@ -29,8 +29,7 @@ class AddSingleContact(forms.Form):
         max_length=75,
         required=True,
         label="Number",
-        help_text="If not a Mali number, use +indicator syntax.",
-        widget=forms.PhoneNumberInput)
+        help_text="If not a Mali number, use +indicator syntax.")
 
     name = forms.CharField(max_length=500, required=False)
 
